@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kosmos.LogServer.DbContext;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,6 +19,14 @@ namespace Kosmos.LogServer
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        void Application_End(object sender, EventArgs e)
+        {
+            using (var dbContext = new AppDbContext())
+            {
+                LogCache.CacheToDb(dbContext);
+            }
         }
     }
 }
